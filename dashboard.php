@@ -1,225 +1,214 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
-if(strlen($_SESSION['login'])==0)
+include('include/config.php');
+if(strlen($_SESSION['login'])==1)
   { 
 header('location:index.php');
 }
 else{
-date_default_timezone_set('Asia/Kolkata');// change according timezone
-$currentTime = date( 'd-m-Y h:i:s A', time () );
-
-
-if(isset($_POST['submit']))
-{
-$fname=$_POST['fullname'];
-$contactno=$_POST['contactno'];
-$address=$_POST['address'];
-$state=$_POST['state'];
-$pincode=$_POST['pincode'];
-$categoryName=$_POST['categoryName'];
-$servicedetails=$_POST['servicedetails'];
-$facebook=$_POST['facebook'];
-$instagram=$_POST['instagram'];
-$twitter=$_POST['twitter'];
-$linkedin=$_POST['linkedin'];
-$query=mysqli_query($con,"update visitors set fullName='$fname',contactNo='$contactno',address='$address',State='$state',categoryName='$categoryName',pincode='$pincode',servicedetails='$servicedetails',facebook='$facebook',instagram='$instagram',twitter='$twitter',linkedin='$linkedin' where userEmail='".$_SESSION['login']."'");
-if($query)
-{
-$successmsg="Profile Successfully !!";
-}
-else
-{
-$errormsg="Profile not updated !!";
-}
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Dashboard">
-    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Professional Artist Search Engine | User Dashboard</title>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
-    <!--external css-->
-    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="assets/js/bootstrap-datepicker/css/datepicker.css" />
-    <link rel="stylesheet" type="text/css" href="assets/js/bootstrap-daterangepicker/daterangepicker.css" />
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/style-responsive.css" rel="stylesheet">
+  <title>Professional Artist Search Engine </title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+      <h1 class="logo me-auto"><a href="index.php">PASEMS</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="index.php">Home</a></li>
+		  <li class="dropdown"><a href="#"><span>Category</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+
+			<?php $sql=mysqli_query($con,"select categoryName from category ");
+while ($rw=mysqli_fetch_array($sql)) {
   
-  </head>
-
-  <body>
-
-  <section id="container" >
-     <?php include("includes/header.php");?>
-      <?php include("includes/sidebar.php");?>
-      <section id="main-content">
-          <section class="wrapper">
-          	<h3><i class="fa fa-angle-right"></i> Visitors - Dashboard</h3>
-          	
-          	<!-- BASIC FORM ELELEMNTS -->
-          	<div class="row mt">
-          		<div class="col-lg-12">
-                  <div class="form-panel">
-                  	
-
-                      <?php if($successmsg)
-                      {?>
-                      <div class="alert alert-success alert-dismissable">
-                       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                      <b>Well done!</b> <?php echo htmlentities($successmsg);?></div>
-                      <?php }?>
-
-   <?php if($errormsg)
-                      {?>
-                      <div class="alert alert-danger alert-dismissable">
- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                      <b>Oh snap!</b> </b> <?php echo htmlentities($errormsg);?></div>
-                      <?php }?>
- <?php $query=mysqli_query($con,"select * from visitors where userEmail='".$_SESSION['login']."'");
- while($row=mysqli_fetch_array($query)) 
- {
- ?>                     
-
-  <h4 class="mb"><i class="fa fa-user"></i>&nbsp;&nbsp;<?php echo htmlentities($row['fullName']);?>'s Profile</h4>
-    <h5><b>Last Updated at :</b>&nbsp;&nbsp;<?php echo htmlentities($row['updationDate']);?></h5>
-                      <form class="form-horizontal style-form" method="post" name="profile" >
-
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Full Name</label>
-<div class="col-sm-4">
-<input type="text" name="fullname" required="required" value="<?php echo htmlentities($row['fullName']);?>" class="form-control" readonly>
- </div>
-<label class="col-sm-2 col-sm-2 control-label">User Email </label>
- <div class="col-sm-4">
-<input type="email" name="useremail" required="required" value="<?php echo htmlentities($row['userEmail']);?>" class="form-control" readonly>
-</div>
- </div>
-
-
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Contact</label>
- <div class="col-sm-4">
-<input type="text" name="contactno" required="required" value="<?php echo htmlentities($row['contactNo']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">Address </label>
-<div class="col-sm-4">
-<input  name="address" required="required" class="form-control" value="<?php echo htmlentities($row['address']);?>" readonly>
-</div>
-</div>
-
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">State</label>
-<div class="col-sm-4">
-<input type="text" name="state" required="required" value="<?php echo htmlentities($row['State']);?>" class="form-control" readonly>
-</div>
-</div>
-
-
-
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Pincode</label>
-<div class="col-sm-4">
-<input type="text" name="pincode" maxlength="6" required="required" value="<?php echo htmlentities($row['pincode']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">Reg Date </label>
-<div class="col-sm-4">
-<input type="text" name="regdate" required="required" value="<?php echo htmlentities($row['regDate']);?>" class="form-control" readonly>
- </div>
-</div>
-
-
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">User Photo</label>
-<div class="col-sm-4">
-<?php $userphoto=$row['userImage'];
-if($userphoto==""):
+  ?>
+  <li value="<?php echo htmlentities($rw['categoryName']);?>"><a href="team.php?viewid=<?php echo htmlentities($rw['categoryName']);?>"><?php echo htmlentities($rw['categoryName']);?></a></li>
+<?php
+}
 ?>
-<img src="userimages/noimage.png" width="256" height="256" >
-<a href="update-image.php"></a>
-<?php else:?>
-	<img src="userimages/<?php echo htmlentities($userphoto);?>" width="256" height="256">
-	<a href="update-image.php"></a>
-<?php endif;?>
-</div>
+            </ul>
+          </li>
+          <li><a href="about.php">About Us</a></li>
+          <li><a href="contact.php">Contact</a></li>
+          <li><a href="admin" class="getstarted">Admin</a></li>
+          <li><a href="users" class="getstarted">Artists</a></li>
+          <li><a href="visitors" class="getstarted">Visitors</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
 
-</div>
+    </div>
+  </header><!-- End Header -->
+  <!-- ======= Hero Section ======= --><!--
+  <section id="hero">
+    <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
 
+      <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
 
+      <div class="carousel-inner" role="listbox">
 
+        <div class="carousel-item active" style="background-image: url(assets/img/slide/slide-1.jpg)">
+          <div class="carousel-container">
+            <div class="container">
+              <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Proffessional Artists Search Engine</span></h2>
+              <p class="animate__animated animate__fadeInUp"></p>
+              <a href="#breadcrumbs" class="btn-get-started animate__animated animate__fadeInUp scrollto">Explore Artists</a>
+            </div>
+          </div>
+        </div>
 
+        <div class="carousel-item" style="background-image: url(assets/img/slide/slide-2.jpg)">
+          <div class="carousel-container">
+            <div class="container">
+              <h2 class="animate__animated animate__fadeInDown">Proffessional Artists Search Engine</h2>
+              <p class="animate__animated animate__fadeInUp"></p>
+              <a href="#breadcrumbs" class="btn-get-started animate__animated animate__fadeInUp scrollto">Explore Artists</a>
+            </div>
+          </div>
+        </div>
 
+        <div class="carousel-item" style="background-image: url(assets/img/slide/slide-3.jpg)">
+          <div class="carousel-container">
+            <div class="container">
+              <h2 class="animate__animated animate__fadeInDown"></p>
+              <a href="#breadcrumbs" class="btn-get-started animate__animated animate__fadeInUp scrollto">Explore Artists</a>
+            </div>
+          </div>
+        </div>
 
+      </div>
 
+      <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
+      </a>
 
+      <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
+      </a>
 
+    </div>
+  </section>--><!-- End Hero -->
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Professional Artists</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Artists</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team ">
+      <div class="container">
+
+        <div class="row">
+
+<?php $query=mysqli_query($con,"select * from users where status=1");
+$cnt=1;
+while($row=mysqli_fetch_array($query))
+{
+?>	
+
+          <div class="col-lg-6">
+            <div class="member d-flex align-items-start">
+              <div class="pic"><img src="users/userimages/<?php echo htmlentities($row['userImage']);?>" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4><a href="team-details.php?uid=<?php echo htmlentities($row['fullName']);?>"><?php echo htmlentities($row['fullName']);?></a></h4>
+                <p><?php echo htmlentities($row['categoryName']);?></p>
+                <p><?php echo htmlentities($row['State']);?></p>
+                <span></span>
+                <div class="social">
+                  <a href="<?php echo htmlentities($row['twitter']);?>"><i class="ri-twitter-fill"></i></a>
+                  <a href="<?php echo htmlentities($row['instagram']);?>"><i class="ri-facebook-fill"></i></a>
+                  <a href="<?php echo htmlentities($row['facebook']);?>"><i class="ri-instagram-fill"></i></a>
+                  <a href="<?php echo htmlentities($row['linkedin']);?>"> <i class="ri-linkedin-box-fill"></i> </a>
+                </div>
+				
+              </div>
+            </div>
+          </div>
 <?php } ?>
 
-                      
 
-                          </form>
-                          </div>
-                          </div>
-                          </div>
-                          
-          	
-          	
-		</section>
-      </section>
-    <?php include("includes/footer.php");?>
-  </section>
+        </div>
 
-    <!-- js placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-    <script src="assets/js/jquery.scrollTo.min.js"></script>
-    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+      </div>
+    </section><!-- End Team Section -->
 
+  </main><!-- End #main -->
 
-    <!--common script for all pages-->
-    <script src="assets/js/common-scripts.js"></script>
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>PASEMS</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="#">Students</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
 
-    <!--script for this page-->
-    <script src="assets/js/jquery-ui-1.9.2.custom.min.js"></script>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-	<!--custom switch-->
-	<script src="assets/js/bootstrap-switch.js"></script>
-	
-	<!--custom tagsinput-->
-	<script src="assets/js/jquery.tagsinput.js"></script>
-	
-	<!--custom checkbox & radio-->
-	
-	<script type="text/javascript" src="assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script type="text/javascript" src="assets/js/bootstrap-daterangepicker/date.js"></script>
-	<script type="text/javascript" src="assets/js/bootstrap-daterangepicker/daterangepicker.js"></script>
-	
-	<script type="text/javascript" src="assets/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
-	
-	
-	<script src="assets/js/form-component.js"></script>    
-    
-    
-  <script>
-      //custom select box
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
 
-      $(function(){
-          $('select.styled').customSelect();
-      });
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
 
-  </script>
+</body>
 
-  </body>
-</html>
-<?php } ?>
+</html><?php }?>
