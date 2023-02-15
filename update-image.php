@@ -13,25 +13,34 @@ $currentTime = date( 'd-m-Y h:i:s A', time () );
 
 if(isset($_POST['submit']))
 {
-$fname=$_POST['fullname'];
-$contactno=$_POST['contactno'];
-$address=$_POST['address'];
-$state=$_POST['state'];
-$pincode=$_POST['pincode'];
-$categoryName=$_POST['categoryName'];
-$servicedetails=$_POST['servicedetails'];
-$facebook=$_POST['facebook'];
-$instagram=$_POST['instagram'];
-$twitter=$_POST['twitter'];
-$linkedin=$_POST['linkedin'];
-$query=mysqli_query($con,"update users set fullName='$fname',contactNo='$contactno',address='$address',State='$state',categoryName='$categoryName',pincode='$pincode',servicedetails='$servicedetails',facebook='$facebook',instagram='$instagram',twitter='$twitter',linkedin='$linkedin' where userEmail='".$_SESSION['login']."'");
-if($query)
+$imgfile=$_FILES["image"]["name"];
+
+// get the image extension
+$extension = substr($imgfile,strlen($imgfile)-4,strlen($imgfile));
+// allowed extensions
+$allowed_extensions = array(".jpg","jpeg",".png",".gif");
+
+// Validation for allowed extensions .in_array() function searches an array for a specific value.
+if(!in_array($extension,$allowed_extensions))
 {
-$successmsg="Profile Successfully !!";
+echo "<script>alert('Invalid format. Only jpg / jpeg/ png /gif format allowed');</script>";
 }
 else
 {
-$errormsg="Profile not updated !!";
+//rename the image file
+$imgnewfile=md5($imgfile).$extension;
+// Code for move image into directory
+move_uploaded_file($_FILES["image"]["tmp_name"],"userimages/".$imgnewfile);
+// Query for insertion data into database
+$query=mysqli_query($con,"update users set userImage='$imgnewfile' where userEmail='".$_SESSION['login']."'");
+if($query)
+{
+$successmsg="Profile photo Successfully !!";
+}
+else
+{
+$errormsg="Profile photo not updated !!";
+}
 }
 }
 ?>
@@ -45,7 +54,7 @@ $errormsg="Profile not updated !!";
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Professional Artist Search Engine | User Dashboard</title>
+    <title>CMS | User Change Password</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -65,7 +74,7 @@ $errormsg="Profile not updated !!";
       <?php include("includes/sidebar.php");?>
       <section id="main-content">
           <section class="wrapper">
-          	<h3><i class="fa fa-angle-right"></i> Professional Artist Search Engine - Dashboard</h3>
+          	<h3><i class="fa fa-angle-right"></i> Update  Profile Photo</h3>
           	
           	<!-- BASIC FORM ELELEMNTS -->
           	<div class="row mt">
@@ -92,80 +101,13 @@ $errormsg="Profile not updated !!";
  ?>                     
 
   <h4 class="mb"><i class="fa fa-user"></i>&nbsp;&nbsp;<?php echo htmlentities($row['fullName']);?>'s Profile</h4>
-    <h5><b>Last Updated at :</b>&nbsp;&nbsp;<?php echo htmlentities($row['updationDate']);?></h5>
-                      <form class="form-horizontal style-form" method="post" name="profile" >
-
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Full Name</label>
-<div class="col-sm-4">
-<input type="text" name="fullname" required="required" value="<?php echo htmlentities($row['fullName']);?>" class="form-control" readonly>
- </div>
-<label class="col-sm-2 col-sm-2 control-label">User Email </label>
- <div class="col-sm-4">
-<input type="email" name="useremail" required="required" value="<?php echo htmlentities($row['userEmail']);?>" class="form-control" readonly>
-</div>
- </div>
+    
+                      <form class="form-horizontal style-form" enctype="multipart/form-data"  method="post" name="profile" >
 
 
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Contact</label>
- <div class="col-sm-4">
-<input type="text" name="contactno" required="required" value="<?php echo htmlentities($row['contactNo']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">Address </label>
-<div class="col-sm-4">
-<input  name="address" required="required" class="form-control" value="<?php echo htmlentities($row['address']);?>" readonly>
-</div>
-</div>
 
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">State</label>
-<div class="col-sm-4">
-<input type="text" name="state" required="required" value="<?php echo htmlentities($row['State']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">Category</label>
-<div class="col-sm-4">
-<input type="text" name="categoryName" required="required" value="<?php echo htmlentities($row['categoryName']);?>" class="form-control" readonly>
-</div>
-</div>
 
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Artists Details (max 2000 words) </label>
-<div class="col-sm-10">
-<input type="text" name="servicedetails" required="required" value="<?php echo htmlentities($row['servicedetails']);?>" class="form-control" readonly>
-</div>
-</div>
 
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Facebook</label>
-<div class="col-sm-4">
-<input type="text" name="facebook" required="required" value="<?php echo htmlentities($row['facebook']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">Instagram </label>
-<div class="col-sm-4">
-<input type="text" name="instagram" required="required" value="<?php echo htmlentities($row['instagram']);?>" class="form-control" readonly>
- </div>
-</div><div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Twitter</label>
-<div class="col-sm-4">
-<input type="text" name="twitter"  required="required" value="<?php echo htmlentities($row['twitter']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">LinkedIn </label>
-<div class="col-sm-4">
-<input type="text" name="linkedin" required="required" value="<?php echo htmlentities($row['linkedin']);?>" class="form-control" readonly>
- </div>
-</div>
-
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Pincode</label>
-<div class="col-sm-4">
-<input type="text" name="pincode" maxlength="6" required="required" value="<?php echo htmlentities($row['pincode']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">Reg Date </label>
-<div class="col-sm-4">
-<input type="text" name="regdate" required="required" value="<?php echo htmlentities($row['regDate']);?>" class="form-control" readonly>
- </div>
-</div>
 
 
 <div class="form-group">
@@ -175,16 +117,21 @@ $errormsg="Profile not updated !!";
 if($userphoto==""):
 ?>
 <img src="userimages/noimage.png" width="256" height="256" >
-<a href="update-image.php"></a>
 <?php else:?>
 	<img src="userimages/<?php echo htmlentities($userphoto);?>" width="256" height="256">
-	<a href="update-image.php"></a>
+
 <?php endif;?>
 </div>
 
 </div>
 
+<div class="form-group">
+<label class="col-sm-2 col-sm-2 control-label">Upload New Photo</label>
+<div class="col-sm-4">
+<input type="file" name="image"  required />
+</div>
 
+</div>
 
 
 
@@ -194,7 +141,11 @@ if($userphoto==""):
 
 <?php } ?>
 
-                      
+                          <div class="form-group">
+                           <div class="col-sm-10" style="padding-left:25% ">
+<button type="submit" name="submit" class="btn btn-primary">Submit</button>
+</div>
+</div>
 
                           </form>
                           </div>

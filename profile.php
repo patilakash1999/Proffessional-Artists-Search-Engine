@@ -45,7 +45,7 @@ $errormsg="Profile not updated !!";
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Professional Artist Search Engine | User Dashboard</title>
+    <title>CMS | User Change Password</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -65,7 +65,7 @@ $errormsg="Profile not updated !!";
       <?php include("includes/sidebar.php");?>
       <section id="main-content">
           <section class="wrapper">
-          	<h3><i class="fa fa-angle-right"></i> Professional Artist Search Engine - Dashboard</h3>
+          	<h3><i class="fa fa-angle-right"></i> Profile info</h3>
           	
           	<!-- BASIC FORM ELELEMNTS -->
           	<div class="row mt">
@@ -98,7 +98,7 @@ $errormsg="Profile not updated !!";
 <div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">Full Name</label>
 <div class="col-sm-4">
-<input type="text" name="fullname" required="required" value="<?php echo htmlentities($row['fullName']);?>" class="form-control" readonly>
+<input type="text" name="fullname" required="required" value="<?php echo htmlentities($row['fullName']);?>" class="form-control" >
  </div>
 <label class="col-sm-2 col-sm-2 control-label">User Email </label>
  <div class="col-sm-4">
@@ -110,56 +110,88 @@ $errormsg="Profile not updated !!";
 <div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">Contact</label>
  <div class="col-sm-4">
-<input type="text" name="contactno" required="required" value="<?php echo htmlentities($row['contactNo']);?>" class="form-control" readonly>
+<input type="text" name="contactno" required="required" value="<?php echo htmlentities($row['contactNo']);?>" class="form-control">
 </div>
 <label class="col-sm-2 col-sm-2 control-label">Address </label>
 <div class="col-sm-4">
-<input  name="address" required="required" class="form-control" value="<?php echo htmlentities($row['address']);?>" readonly>
+<textarea  name="address" required="required" class="form-control"><?php echo htmlentities($row['address']);?></textarea>
 </div>
 </div>
 
 <div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">State</label>
 <div class="col-sm-4">
-<input type="text" name="state" required="required" value="<?php echo htmlentities($row['State']);?>" class="form-control" readonly>
+<select name="state" required="required" class="form-control">
+<option value="<?php echo htmlentities($row['State']);?>"><?php echo htmlentities($st=$row['State']);?></option>
+<?php $sql=mysqli_query($con,"select stateName from state ");
+while ($rw=mysqli_fetch_array($sql)) {
+  if($rw['stateName']==$st)
+  {
+    continue;
+  }
+  else
+  {
+  ?>
+  <option value="<?php echo htmlentities($rw['stateName']);?>"><?php echo htmlentities($rw['stateName']);?></option>
+<?php
+}}
+?>
+
+</select>
 </div>
 <label class="col-sm-2 col-sm-2 control-label">Category</label>
 <div class="col-sm-4">
-<input type="text" name="categoryName" required="required" value="<?php echo htmlentities($row['categoryName']);?>" class="form-control" readonly>
+<select name="categoryName" required="required" class="form-control">
+<option value="<?php echo htmlentities($row['categoryName']);?>"><?php echo htmlentities($st=$row['categoryName']);?></option>
+<?php $sql=mysqli_query($con,"select categoryName from category ");
+while ($rw=mysqli_fetch_array($sql)) {
+  if($rw['categoryName']==$st)
+  {
+    continue;
+  }
+  else
+  {
+  ?>
+  <option value="<?php echo htmlentities($rw['categoryName']);?>"><?php echo htmlentities($rw['categoryName']);?></option>
+<?php
+}}
+?>
+
+</select>
 </div>
 </div>
 
 <div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">Artists Details (max 2000 words) </label>
 <div class="col-sm-10">
-<input type="text" name="servicedetails" required="required" value="<?php echo htmlentities($row['servicedetails']);?>" class="form-control" readonly>
+<textarea  name="servicedetails" class="form-control" value="<?php echo htmlentities($row['servicedetails']);?>"></textarea>
 </div>
 </div>
 
 <div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">Facebook</label>
 <div class="col-sm-4">
-<input type="text" name="facebook" required="required" value="<?php echo htmlentities($row['facebook']);?>" class="form-control" readonly>
+<input type="text" name="facebook" required="required" value="<?php echo htmlentities($row['facebook']);?>" class="form-control">
 </div>
 <label class="col-sm-2 col-sm-2 control-label">Instagram </label>
 <div class="col-sm-4">
-<input type="text" name="instagram" required="required" value="<?php echo htmlentities($row['instagram']);?>" class="form-control" readonly>
+<input type="text" name="instagram" required="required" value="<?php echo htmlentities($row['instagram']);?>" class="form-control">
  </div>
 </div><div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">Twitter</label>
 <div class="col-sm-4">
-<input type="text" name="twitter"  required="required" value="<?php echo htmlentities($row['twitter']);?>" class="form-control" readonly>
+<input type="text" name="twitter"  required="required" value="<?php echo htmlentities($row['twitter']);?>" class="form-control">
 </div>
 <label class="col-sm-2 col-sm-2 control-label">LinkedIn </label>
 <div class="col-sm-4">
-<input type="text" name="linkedin" required="required" value="<?php echo htmlentities($row['linkedin']);?>" class="form-control" readonly>
+<input type="text" name="linkedin" required="required" value="<?php echo htmlentities($row['linkedin']);?>" class="form-control" >
  </div>
 </div>
 
 <div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">Pincode</label>
 <div class="col-sm-4">
-<input type="text" name="pincode" maxlength="6" required="required" value="<?php echo htmlentities($row['pincode']);?>" class="form-control" readonly>
+<input type="text" name="pincode" maxlength="6" required="required" value="<?php echo htmlentities($row['pincode']);?>" class="form-control">
 </div>
 <label class="col-sm-2 col-sm-2 control-label">Reg Date </label>
 <div class="col-sm-4">
@@ -175,10 +207,10 @@ $errormsg="Profile not updated !!";
 if($userphoto==""):
 ?>
 <img src="userimages/noimage.png" width="256" height="256" >
-<a href="update-image.php"></a>
+<a href="update-image.php">Change Photo</a>
 <?php else:?>
 	<img src="userimages/<?php echo htmlentities($userphoto);?>" width="256" height="256">
-	<a href="update-image.php"></a>
+	<a href="update-image.php">Change Photo</a>
 <?php endif;?>
 </div>
 
@@ -194,7 +226,11 @@ if($userphoto==""):
 
 <?php } ?>
 
-                      
+                          <div class="form-group">
+                           <div class="col-sm-10" style="padding-left:25% ">
+<button type="submit" name="submit" class="btn btn-primary">Submit</button>
+</div>
+</div>
 
                           </form>
                           </div>
