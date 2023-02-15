@@ -1,178 +1,209 @@
 <?php
-session_start();
 error_reporting(0);
-include("includes/config.php");
-if(isset($_POST['submit']))
-{
-$ret=mysqli_query($con,"SELECT * FROM visitors WHERE userEmail='".$_POST['username']."' and password='".md5($_POST['password'])."'");
-$num=mysqli_fetch_array($ret);
-if($num>0)
-{
-/*$extra="dashboard.php";*///
-$_SESSION['login']=$_POST['username'];
-$_SESSION['id']=$num['id'];
-$host=$_SERVER['HTTP_HOST'];
-$uip=$_SERVER['REMOTE_ADDR'];
-$status=1;
-$log=mysqli_query($con,"insert into userlog(uid,username,userip,status) values('".$_SESSION['id']."','".$_SESSION['login']."','$uip','$status')");
-$uri=rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
-header("location:http://localhost/proffessionalartistssearchengine/dashboard.php");
-exit();
-}
-else
-{
-$_SESSION['login']=$_POST['username'];	
-$uip=$_SERVER['REMOTE_ADDR'];
-$status=0;
-mysqli_query($con,"insert into userlog(username,userip,status) values('".$_SESSION['login']."','$uip','$status')");
-$errormsg="Invalid username or password";
-$extra="login.php";
-
-}
-}
-
-
-
-if(isset($_POST['change']))
-{
-   $email=$_POST['email'];
-    $contact=$_POST['contact'];
-    $password=md5($_POST['password']);
-$query=mysqli_query($con,"SELECT * FROM visitors WHERE userEmail='$email' and contactNo='$contact'");
-$num=mysqli_fetch_array($query);
-if($num>0)
-{
-mysqli_query($con,"update visitors set password='$password' WHERE userEmail='$email' and contactNo='$contact' ");
-$msg="Password Changed Successfully";
-
-}
-else
-{
-$errormsg="Invalid email id or Contact no";
-}
-}
+session_start();
+include('include/config.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Dashboard">
-    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Professional Artist Search Engine | Artist Login</title>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
-    <!--external css-->
-    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-        
-    <!-- Custom styles for this template -->
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/style-responsive.css" rel="stylesheet">
-<script type="text/javascript">
-function valid()
-{
- if(document.forgot.password.value!= document.forgot.confirmpassword.value)
-{
-alert("Password and Confirm Password Field do not match  !!");
-document.forgot.confirmpassword.focus();
-return false;
+  <title>Professional Artist Search Engine </title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+      <h1 class="logo me-auto"><a href="index.php">PASEMS</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="index.php">Home</a></li>
+		  <li class="dropdown"><a href="#"><span>Category</span> <i class="bi bi-chevron-down"></i></a>
+            <?php if(strlen($_SESSION['login'])==1){ ?><ul>
+
+			<?php $sql=mysqli_query($con,"select categoryName from category ");
+while ($rw=mysqli_fetch_array($sql)) {
+  
+  ?>
+  <li value="<?php echo htmlentities($rw['categoryName']);?>"><a href="team.php?viewid=<?php echo htmlentities($rw['categoryName']);?>"><?php echo htmlentities($rw['categoryName']);?></a></li>
+<?php
 }
-return true;
-}
-</script>
-  </head>
+?>
+            </ul><?php } ?>
+          </li>
+          <li><a href="about.php">About Us</a></li>
+          <li><a href="contact.php">Contact</a></li>
+          <li><a href="admin" class="getstarted">Admin</a></li>
+          <li><a href="users" class="getstarted">Artists</a></li>
+          <li><a href="visitors" class="getstarted">Visitors</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
 
-  <body>
+    </div>
+  </header><!-- End Header -->
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+    <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
 
-      <!-- **********************************************************************************************************************************************************
-      MAIN CONTENT
-      *********************************************************************************************************************************************************** -->
+      <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
 
-	  <div id="login-page">
-	  	<div class="container">
-	  		<h3 align="center" style="color:blue"><a href="../index.php" style="color:blue">Professional Artist Search Engine</a></h3>
-	<hr />
-		      <form class="form-login" name="login" method="post">
-		        <h2 class="form-login-heading">sign in now</h2>
-		        <p style="padding-left:4%; padding-top:2%;  color:red">
-		        	<?php if($errormsg){
-echo htmlentities($errormsg);
-		        		}?></p>
+      <div class="carousel-inner" role="listbox">
 
-		        		<p style="padding-left:4%; padding-top:2%;  color:green">
-		        	<?php if($msg){
-echo htmlentities($msg);
-		        		}?></p>
-		        <div class="login-wrap">
-		            <input type="text" class="form-control" name="username" placeholder="Email"  required autofocus>
-		            <br>
-		            <input type="password" class="form-control" name="password" required placeholder="Password">
-		            <label class="checkbox">
-		                <span class="pull-right">
-		                    <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
-		
-		                </span>
-		            </label>
-		            <button class="btn btn-theme btn-block" name="submit" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
-		            <hr>
-		           </form>
-		            <div class="registration">
-		                Don't have an account yet?<br/>
-		                <a class="" href="registration.php">
-		                    Create an account
-		                </a>
-		            </div>
-		
-		        </div>
-		
-		          <!-- Modal -->
-		           <form class="form-login" name="forgot" method="post">
-		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-		              <div class="modal-dialog">
-		                  <div class="modal-content">
-		                      <div class="modal-header">
-		                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                          <h4 class="modal-title">Forgot Password ?</h4>
-		                      </div>
-		                      <div class="modal-body">
-		                          <p>Enter your details below to reset your password.</p>
-<input type="email" name="email" placeholder="Email" autocomplete="off" class="form-control" required><br >
-<input type="text" name="contact" placeholder="contact No" autocomplete="off" class="form-control" required><br>
- <input type="password" class="form-control" placeholder="New Password" id="password" name="password"  required ><br />
-<input type="password" class="form-control unicase-form-control text-input" placeholder="Confirm Password" id="confirmpassword" name="confirmpassword" required >
+        <!-- Slide 1 -->
+        <div class="carousel-item active" style="background-image: url(assets/img/slide/slide-1.jpg)">
+          <div class="carousel-container">
+            <div class="container">
+              <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Proffessional Artists Search Engine</span></h2>
+              <p class="animate__animated animate__fadeInUp"></p>
+              <a href="http://localhost/proffessionalartistssearchengine/visitors/" class="btn-get-started animate__animated animate__fadeInUp scrollto">Explore Artists</a>
+            </div>
+          </div>
+        </div>
 
-		
-		                      </div>
-		                      <div class="modal-footer">
-		                          <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-		                          <button class="btn btn-theme" type="submit" name="change" onclick="return valid();">Submit</button>
-		                      </div>
-		                  </div>
-		              </div>
-		          </div>
-		          <!-- modal -->
-		          </form>
-		
-		      	  	
-	  	
-	  	</div>
-	  </div>
+        <!-- Slide 2 -->
+        <div class="carousel-item" style="background-image: url(assets/img/slide/slide-2.jpg)">
+          <div class="carousel-container">
+            <div class="container">
+              <h2 class="animate__animated animate__fadeInDown">Proffessional Artists Search Engine</h2>
+              <p class="animate__animated animate__fadeInUp"></p>
+              <a href="http://localhost/proffessionalartistssearchengine/visitors/" class="btn-get-started animate__animated animate__fadeInUp scrollto">Explore Artists</a>
+            </div>
+          </div>
+        </div>
 
-    <!-- js placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
+        <!-- Slide 3 -->
+        <div class="carousel-item" style="background-image: url(assets/img/slide/slide-3.jpg)">
+          <div class="carousel-container">
+            <div class="container">
+              <h2 class="animate__animated animate__fadeInDown"></p>
+              <a href="http://localhost/proffessionalartistssearchengine/visitors/" class="btn-get-started animate__animated animate__fadeInUp scrollto">Explore Artists</a>
+            </div>
+          </div>
+        </div>
 
-    <!--BACKSTRETCH-->
-    <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
-    <script type="text/javascript" src="assets/js/jquery.backstretch.min.js"></script>
-    <script>
-        $.backstretch("assets/img/login-bg.jpg", {speed: 500});
-    </script>
+      </div>
+
+      <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
+      </a>
+
+      <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
+      </a>
+
+    </div>
+  </section><!-- End Hero -->
+ <!-- <main id="main">
+
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Professional Artists</h2>
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Artists</li>
+          </ol>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="team" class="team ">
+      <div class="container">
+
+        <div class="row">
+
+<?php $query=mysqli_query($con,"select * from users where status=1");
+$cnt=1;
+while($row=mysqli_fetch_array($query))
+{
+?>	
+
+          <div class="col-lg-6">
+            <div class="member d-flex align-items-start">
+              <div class="pic"><img src="users/userimages/<?php echo htmlentities($row['userImage']);?>" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4><a href="team-details.php?uid=<?php echo htmlentities($row['fullName']);?>"><?php echo htmlentities($row['fullName']);?></a></h4>
+                <p><?php echo htmlentities($row['categoryName']);?></p>
+                <p><?php echo htmlentities($row['State']);?></p>
+                <span></span>
+                <div class="social">
+                  <a href="<?php echo htmlentities($row['twitter']);?>"><i class="ri-twitter-fill"></i></a>
+                  <a href="<?php echo htmlentities($row['instagram']);?>"><i class="ri-facebook-fill"></i></a>
+                  <a href="<?php echo htmlentities($row['facebook']);?>"><i class="ri-instagram-fill"></i></a>
+                  <a href="<?php echo htmlentities($row['linkedin']);?>"> <i class="ri-linkedin-box-fill"></i> </a>
+                </div>
+				
+              </div>
+            </div>
+          </div>
+<?php } ?>
 
 
-  </body>
+        </div>
+
+      </div>
+    </section>
+  </main>--><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>PASEMS</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="#">Students</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
 </html>
