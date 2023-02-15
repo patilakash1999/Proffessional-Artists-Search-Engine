@@ -24,7 +24,7 @@ $facebook=$_POST['facebook'];
 $instagram=$_POST['instagram'];
 $twitter=$_POST['twitter'];
 $linkedin=$_POST['linkedin'];
-$query=mysqli_query($con,"update users set fullName='$fname',contactNo='$contactno',address='$address',State='$state',categoryName='$categoryName',pincode='$pincode',servicedetails='$servicedetails',facebook='$facebook',instagram='$instagram',twitter='$twitter',linkedin='$linkedin' where userEmail='".$_SESSION['login']."'");
+$query=mysqli_query($con,"update visitors set fullName='$fname',contactNo='$contactno',address='$address',State='$state',categoryName='$categoryName',pincode='$pincode',servicedetails='$servicedetails',facebook='$facebook',instagram='$instagram',twitter='$twitter',linkedin='$linkedin' where userEmail='".$_SESSION['login']."'");
 if($query)
 {
 $successmsg="Profile Successfully !!";
@@ -65,7 +65,7 @@ $errormsg="Profile not updated !!";
       <?php include("includes/sidebar.php");?>
       <section id="main-content">
           <section class="wrapper">
-          	<h3><i class="fa fa-angle-right"></i> Professional Artist Search Engine - Dashboard</h3>
+          	<h3><i class="fa fa-angle-right"></i> Visitors - Dashboard</h3>
           	
           	<!-- BASIC FORM ELELEMNTS -->
           	<div class="row mt">
@@ -86,7 +86,7 @@ $errormsg="Profile not updated !!";
  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                       <b>Oh snap!</b> </b> <?php echo htmlentities($errormsg);?></div>
                       <?php }?>
- <?php $query=mysqli_query($con,"select * from users where userEmail='".$_SESSION['login']."'");
+ <?php $query=mysqli_query($con,"select * from visitors where userEmail='".$_SESSION['login']."'");
  while($row=mysqli_fetch_array($query)) 
  {
  ?>                     
@@ -123,38 +123,9 @@ $errormsg="Profile not updated !!";
 <div class="col-sm-4">
 <input type="text" name="state" required="required" value="<?php echo htmlentities($row['State']);?>" class="form-control" readonly>
 </div>
-<label class="col-sm-2 col-sm-2 control-label">Category</label>
-<div class="col-sm-4">
-<input type="text" name="categoryName" required="required" value="<?php echo htmlentities($row['categoryName']);?>" class="form-control" readonly>
-</div>
 </div>
 
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Artists Details (max 2000 words) </label>
-<div class="col-sm-10">
-<input type="text" name="servicedetails" required="required" value="<?php echo htmlentities($row['servicedetails']);?>" class="form-control" readonly>
-</div>
-</div>
 
-<div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Facebook</label>
-<div class="col-sm-4">
-<input type="text" name="facebook" required="required" value="<?php echo htmlentities($row['facebook']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">Instagram </label>
-<div class="col-sm-4">
-<input type="text" name="instagram" required="required" value="<?php echo htmlentities($row['instagram']);?>" class="form-control" readonly>
- </div>
-</div><div class="form-group">
-<label class="col-sm-2 col-sm-2 control-label">Twitter</label>
-<div class="col-sm-4">
-<input type="text" name="twitter"  required="required" value="<?php echo htmlentities($row['twitter']);?>" class="form-control" readonly>
-</div>
-<label class="col-sm-2 col-sm-2 control-label">LinkedIn </label>
-<div class="col-sm-4">
-<input type="text" name="linkedin" required="required" value="<?php echo htmlentities($row['linkedin']);?>" class="form-control" readonly>
- </div>
-</div>
 
 <div class="form-group">
 <label class="col-sm-2 col-sm-2 control-label">Pincode</label>

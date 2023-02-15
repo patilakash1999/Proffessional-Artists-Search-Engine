@@ -8,7 +8,7 @@ if(isset($_POST['submit']))
 	$password=md5($_POST['password']);
 	$contactno=$_POST['contactno'];
 	$status=0;
-	$query=mysqli_query($con,"insert into visitors(fullName,userEmail,password,contactNo,status) values('$fullname','$email','$password','$contactno','$status')");
+	$query=mysqli_query($con,"insert into users(fullName,userEmail,password,contactNo,status) values('$fullname','$email','$password','$contactno','$status')");
 	$msg="Registration successfull. Now You can login !";
 }
 ?>
@@ -50,7 +50,7 @@ error:function (){}
 	<h3 align="center" style="color:blue"><a href="../index.php" style="color:blue">Professional Artist Search Engine</a></h3>
 	<hr />
 		      <form class="form-login" method="post">
-		        <h2 class="form-login-heading">Visitors Registration</h2>
+		        <h2 class="form-login-heading">Artist Registration</h2>
 		        <p style="padding-left: 1%; color: green">
 		        	<?php if($msg){
 echo htmlentities($msg);
@@ -65,7 +65,7 @@ echo htmlentities($msg);
 		             <span id="user-availability-status1" style="font-size:12px;"></span>
 		            <br>
 		            <input type="password" class="form-control" placeholder="Password" required="required" name="password"><br >
-		             <input type="text" class="form-control" pattern="[6789][0-9]{9}" maxlength="10" min="10" name="contactno" placeholder="Contact no" required="required" autofocus>
+		             <input type="text" class="form-control" maxlength="10" name="contactno" placeholder="Contact no" required="required" autofocus>
 		            <br>
 		            
 		            <button class="btn btn-theme btn-block"  type="submit" name="submit" id="submit"><i class="fa fa-user"></i> Register</button>
